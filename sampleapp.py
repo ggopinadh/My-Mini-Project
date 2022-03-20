@@ -76,7 +76,7 @@ def youtube():
         l.append(ID)
         
         
-        api_key = "AIzaSyCcIDQftqvj9vZg7es011EVI3YFWODJE2U" # Replace this dummy api key with your own.
+        api_key = "################################" # Replace this dummy api key with your own.
         youtube = build('youtube', 'v3', developerKey=api_key)
         box = [['Name', 'Comment', 'Time', 'Likes', 'Reply Count']]
         data = youtube.commentThreads().list(part='snippet', videoId=ID, maxResults='100', textFormat="plainText").execute()
@@ -192,7 +192,7 @@ def home2():
     l.clear()
         
         
-    api_key = "AIzaSyCcIDQftqvj9vZg7es011EVI3YFWODJE2U" # Replace this dummy api key with your own.
+    api_key = "###########################################" # Replace this dummy api key with your own.
     youtube = build('youtube', 'v3', developerKey=api_key)
     box = [['Name', 'Comment', 'Time', 'Likes', 'Reply Count']]
     data = youtube.commentThreads().list(part='snippet', videoId=ID, maxResults='100', textFormat="plainText").execute()
