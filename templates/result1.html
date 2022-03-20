@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Analysis Report</title>
+	
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Spam/NOn Spam', 'Total'],
+          ['Non Spam', {{nonspam}} ],
+          ['Spam', {{spam}}]
+        ]);
+
+        var options = {
+          title: 'My Daily Activities'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+	
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+	
+</head>
+<style>
+
+
+div.gallery:hover {
+  border: 1px solid #777;
+}
+
+div.gallery img {
+  width: 100%;
+  height: auto;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+.responsive {
+  padding: 0 6px;
+  float: left;
+  width: 49.99999%;
+}
+
+@media only screen and (max-width: 700px) {
+  .responsive {
+    width: 50%;
+    margin: 6px 0;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .responsive {
+    width: 100%;
+  }
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+td,th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2;}
+
+tr:hover {background-color: #ddd;}
+
+th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #f4f3f3;
+  color: white;
+}
+tbody div{
+    overflow:scroll;
+    height:320px;
+}
+
+</style>
+<body>
+
+	<header>
+		<div class="container">
+		<!--<div id="brandname">
+			ML App 
+		</div> -->
+		<h2>Spam Detection For Youtube Comments</h2>
+		
+	</div>
+	</header>
+	<p style="color:#03A9F4; font-family:cooper; font-size:20; text-align:center;"><b>Results for Comment</b></p>
+
+	<a href="{{ url_for('home2')}}">Show All Comments</a>
+
+	<p id="demo" align="center" style="font-style:bold; font-family:Arial;"></p>
+
+{%if spam_per>=60%}
+<script>
+  alert("The Video consists of more than 60% of spam comments!. \nFor your benefit we are providing only the Non-Spam comments only. \nYou can also check all comments by using below options.");
+</script>
+{% endif %}
+
+<div class="responsive">
+<div class="gallery">
+<table border="1">
+  <tr>
+    <th style="color:blue; font-size:20px;" width="75%"><b><u>Comments</u></b></th>
+    <th style="color:blue; font-size:20px;"><b><u>Spam / Ham</u></b></th>
+	
+  </tr>
+  <tbody>
+          <tr>
+            <td colspan="2">
+        <div class="scrollit">
+		<table>
+
+	{%if spam_per>=60%}
+		  {% for key, value in prediction.items() %}
+    <tr>
+	{% if value == 0%}
+		<td width="80%"> <b>{{ key }}</b> </td>
+        <td width="20%">  
+			<h3 style="color:blue;">Not a Spam (It is a Ham)</h3>
+
+			{% endif %}</td>
+   </tr>
+{% endfor %}
+
+{%else%}
+  {% for key, value in prediction.items() %}
+    <tr>
+		<td width="80%"> <b>{{ key }}</b> </td>
+        <td width="20%">  {% if value == 1%}
+			<h3 style="color:red;">Spam</h3>
+			{% elif value == 0%}
+			<h3 style="color:blue;">Not a Spam (It is a Ham)</h3> 
+			{% endif %}</td>
+   </tr>
+{% endfor %}
+
+{% endif %}
+            </table>
+        </div>
+                </td>
+        </tr>
+		</tbody>
+		</table>
+		</div>
+</div>
+
+<div class="responsive">
+<div class="gallery">
+<p style="color:black;"><b> Total Comments: {{spam + nonspam}} </b></p>
+<p style="color:blue;"><b> Total Non-spam Comments: {{nonspam}} </b></p>
+<p style="color:red;"><b> Total Spam Comments: {{spam}} </b></p>
+	<div id="piechart" style="width: 100%; height: 280px;"></div></div>
+
+    <script>
+      function myFunction() {
+	  
+        document.getElementById("demo").innerHTML = "Please Wait, While we load all Comments...";
+	}
+	</script>
+
+</body>
+</html>
